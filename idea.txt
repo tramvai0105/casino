@@ -1,0 +1,21 @@
+1. Таблица предметов(Items):
+    id | prime
+    itemId | уникальный id предмета | string
+    name | number
+    price | number
+    image | string
+    describe? | описание | string
+2. Таблица кейсов(Cases): 
+    id | prime
+    itemId | уникальный id кейса | string
+    name | number
+    price | number
+    image | string
+    items | []Items
+    describe? | описание | string
+
+хряки
+
+свиньихрякикабаныикнуры
+
+элвискоролевскийхряк

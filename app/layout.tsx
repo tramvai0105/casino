@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
-import { Raleway } from 'next/font/google'
+import { Roboto } from 'next/font/google'
 import './globals.css'
 import Header from './ui/header'
 import { FlexCol } from './utils/flex'
 import Spacer from './ui/spacer';
 
-const inter = Raleway({ subsets: ['latin'], weight: "500" })
+const inter = Roboto({ subsets: ['latin'], weight: "400" })
 
 export const metadata: Metadata = {
   title: 'Gold Pig Casino',
