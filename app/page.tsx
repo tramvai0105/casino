@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <FlexCol className='w-full'>
       <Spacer size={80}/>
-      <CaseSection/>
+      <CaseSection>123</CaseSection>
     </FlexCol>
   )
 }

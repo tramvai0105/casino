@@ -11,13 +11,17 @@
   "dependencies": {
     "@radix-ui/themes": "^2.0.1",
     "next": "14.0.3",
+    "next-auth": "^4.24.5",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "uniqid": "^5.4.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uniqid": "^5.3.4",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.3",

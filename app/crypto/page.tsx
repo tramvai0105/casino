@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Spacer from "../ui/spacer";
 import { FlexCol, FlexRow } from "../utils/flex";
-import {codeAlgorithm, decodeAlgorithm} from "./algorithm";
+import {codeAlgorithm, decodeAlgorithm, bestTime} from "./algorithms";
 import KeyPhrase from "./ui/keyphrase";
 import TextArea from "./ui/textarea";
 
@@ -11,7 +11,6 @@ export default function Page(){
     const [phrase, setPhrase] = useState<string>("")
     const [secret, setSecret] = useState<string>("")
     const [result, setResult] = useState<string>("")
-
     function code(){
         let res = codeAlgorithm(phrase, secret);
         setResult(res)

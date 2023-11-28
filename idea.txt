@@ -19,3 +19,56 @@
 свиньихрякикабаныикнуры
 
 элвискоролевскийхряк
+
+Для создания таблиц можно использовать следующие запросы в PostgreSQL:
+
+Создание таблицы предметов (Items):
+sql
+Copy code
+CREATE TABLE Items (
+    id SERIAL PRIMARY KEY,
+    itemId VARCHAR(255),
+    name VARCHAR(255),
+    price NUMERIC,
+    image VARCHAR(255),
+    describe VARCHAR(255)
+);
+Создание таблицы кейсов (Cases):
+sql
+Copy code
+CREATE TABLE Cases (
+    id SERIAL PRIMARY KEY,
+    itemId VARCHAR(255),
+    name VARCHAR(255),
+    price NUMERIC,
+    image VARCHAR(255),
+    describe VARCHAR(255)
+);
+Создание промежуточной таблицы (Item_Case) с использованием поля itemId:
+sql
+Copy code
+CREATE TABLE Item_Case (
+    id SERIAL PRIMARY KEY,
+    itemId VARCHAR(255),
+    CONSTRAINT fk_item FOREIGN KEY (itemId) REFERENCES Items (itemId),
+    CONSTRAINT fk_case FOREIGN KEY (itemId) REFERENCES Cases (itemId)
+);
+В данном примере используется поле itemId в качестве внешнего ключа для связи между таблицами Items и Cases через промежуточную таблицу Item_Case.
+
+Пример оператора INSERT для таблицы предметов (Items):
+
+INSERT INTO Items (itemId, name, price, image, describe)
+VALUES ('item1', 'Item 1', 10, 'image1.png', 'Description of item 1');
+
+Пример оператора INSERT для таблицы кейсов (Cases):
+
+INSERT INTO Cases (itemId, name, price, image, describe)
+VALUES ('case1', 'Case 1', 20, 'case_image1.png', 'Description of case 1');
+
+Пример оператора INSERT для промежуточной таблицы между ними (связующей таблицы):
+
+INSERT INTO IntermediateTable (itemId, caseId)
+VALUES ('item1', 'case1');
+где 'item1' - идентификатор предмета, а 'case1' - идентификатор кейса.
+
+

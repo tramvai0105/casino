@@ -5,3 +5,14 @@
 body{
     background-color: #121212;
 }
+
+.case-element:hover .move-box{
+    --tw-translate-y: -1.25rem/* -20px */;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.case-element:hover .paint-button{
+    --tw-bg-opacity: 1;
+    background-color: rgb(229 70 102 / var(--tw-bg-opacity));
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+}

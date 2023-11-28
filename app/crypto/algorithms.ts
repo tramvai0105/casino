@@ -76,6 +76,12 @@ export function codeAlgorithm(phrase: string, keyPhrase: string){
     if(phrase.length < 1){
         return ""
     }
+    for (let i = 0; i < punc.length; i++) {
+        if(keyPhrase.includes(punc[i])){
+            return ""
+        }
+    }
+    phrase.toLocaleLowerCase();
     let key = []
     for(let i = 0; i < keyPhrase.length; i++){
         key.push(numberFromAbc.get(keyPhrase[i]))
@@ -110,6 +116,12 @@ export function decodeAlgorithm(phrase: string, keyPhrase: string){
     if(phrase.length < 1){
         return ""
     }
+    for (let i = 0; i < punc.length; i++) {
+        if(keyPhrase.includes(punc[i])){
+            return ""
+        }
+    }
+    phrase.toLocaleLowerCase();
     let key = []
     for(let i = 0; i < keyPhrase.length; i++){
         key.push(numberFromAbc.get(keyPhrase[i]))
@@ -137,4 +149,90 @@ export function decodeAlgorithm(phrase: string, keyPhrase: string){
         }
     }
     return res;
+}
+
+export function bestTime(time: number[]){
+    let nums = [0,0,0,0,0,0,0,0,0,0]
+    let res: number[] = [0,0,0,-1];
+    for (let i = 0; i < 4; i++) {
+        nums[time[i]]++
+    }
+    if(nums[7] + nums[8] + nums[9] + nums[6] > 1 
+        || nums[5] > 2 
+        || nums[4] > 3 
+        || nums[3] > 3
+        || nums[6] && nums[3] + nums[4] > 2){
+        throw Error()
+    }
+    if(nums[7] || nums[8] || nums[9]){
+        res[3] = nums.reduce((j, k, i, arr)=> {if(arr[i] && i > j){return i}else{return j}}, 7)
+    }
+    if(nums[6] && nums[0] && nums[3] + nums[4] < 2){
+        res[2] = 6;
+        nums[6]--
+        res[3] = 0
+        nums[0]--
+    }else if(nums[6]){
+        res[3] = 6 
+        nums[6]--
+    }
+    if(nums[5] && res[3] > 0){
+        res[2] = 5;
+        nums[5]--
+    }else if(nums[5] > 1){
+        res[2] = 5;
+        nums[5]--
+        res[3] = 5 
+        nums[5]--
+    }else if(nums[5]){
+        res[2] = 5;
+        nums[5]--
+    }
+    if(nums[4] > 2){
+        res[1] = 4; res[2] = 4; res[3] = 4;
+        nums[4] = 0
+    }else if(nums[4]){
+        res[1] = 4;
+        nums[4]--;
+        if(nums[4] && res[2] > 4){
+            res[3] = 4;
+            nums[4]--;
+        }else if(nums[4]){
+            res[2] = 4;
+            nums[4]--;
+        }
+    }
+    let p = 1;
+    while(nums[3]){
+        if(res[p] < 1){ 
+            res[p] = 3;
+            nums[3]--  
+        }
+        p += 1;
+    }
+    p = 0;
+    while(nums[2]){
+        if(res[p] < 1){ 
+            res[p] = 2;
+            nums[2]--  
+        }
+        p += 1;
+    }
+    p = 0;
+    while(nums[1]){
+        if(res[p] < 1){ 
+            res[p] = 1;
+            nums[1]--  
+        }
+        p += 1;
+    }
+    p = 0;
+    while(nums[0]){
+        if(res[p] < 1){ 
+            res[p] = 0;
+            nums[0]--  
+        }
+        p += 1;
+    }
+    return res.join("");
 }
