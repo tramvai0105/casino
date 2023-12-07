@@ -12,6 +12,7 @@ const itemSchema = z.object({
     name: z.string().min(1),
     price: z.coerce.number().positive(),
     describe: z.string(),
+    rarity: z.string().min(1),
     id: z.string().min(1),
 })
 
@@ -19,6 +20,7 @@ const caseSchema = z.object({
     name: z.string().min(1),
     price: z.coerce.number().positive(),
     describe: z.string(),
+    rarity: z.string().min(1),
 })
 
 export async function addItem(state: { message: string; } | undefined, formData: FormData){
@@ -31,7 +33,8 @@ export async function addItem(state: { message: string; } | undefined, formData:
     const validData = itemSchema.safeParse({
         name: formData.get("name"),
         price: formData.get("price"),
-        describe: formData.get("describe")
+        describe: formData.get("describe"),
+        rarity: formData.get("rarity"),
     })
     if(!validData.success){
         return {
@@ -43,11 +46,13 @@ export async function addItem(state: { message: string; } | undefined, formData:
             message: "Неправильный формат файла",
           };
     }
-    const {name, price, describe} = validData.data;
+    let {name, price, describe, rarity} = validData.data;
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
     let id = uniqid()
-
+    if(rarity != "legend" && rarity != "rare"){
+        rarity = "common"
+    }
     let store : {items: Item[], cases: Case[]} = JSON.parse(fs.readFileSync(process.cwd() + "/app/lib/store.json", 'utf8'));
     fs.writeFileSync(path.resolve(process.cwd() + "/public" + `/${id}.png`), buffer)
     store.items.push({
@@ -56,6 +61,7 @@ export async function addItem(state: { message: string; } | undefined, formData:
         price: price,
         image: `${id}.png`,
         describe: describe,
+        rarity: rarity,
     })
     fs.writeFileSync(process.cwd() + "/app/lib/store.json", JSON.stringify(store))
     revalidatePath("/casesmenu")
@@ -67,6 +73,7 @@ export async function changeItem(state: { message: string; } | undefined, formDa
         name: formData.get("name"),
         price: formData.get("price"),
         describe: formData.get("describe"),
+        rarity: formData.get("rarity"),
         id: formData.get("id")
     })
     if(!validData.success){
@@ -82,8 +89,10 @@ export async function changeItem(state: { message: string; } | undefined, formDa
     }else if(file.size == 0){
         file = null;
     }
-    const {id, name, price, describe} = validData.data;
-
+    let {id, name, price, describe, rarity} = validData.data;
+    if(rarity != "legend" && rarity != "rare"){
+        rarity = "common"
+    }
     let bytes: ArrayBuffer;
     let buffer: Buffer;
 
@@ -107,6 +116,7 @@ export async function changeItem(state: { message: string; } | undefined, formDa
                 price: price,
                 image: item.image,
                 describe: describe,
+                rarity: rarity,
             })
         }else{
             return item;
@@ -251,5 +261,71 @@ export async function removeCase(state: { message: string; } | undefined, formDa
     store.cases = store.cases.filter(item=> item.caseId != id);
     fs.writeFileSync(process.cwd() + "/app/lib/store.json", JSON.stringify(store))
     fs.unlinkSync(path.resolve(process.cwd() + "/public" + `/${id}.png`))
+    revalidatePath("/casesmenu")
+}
+
+export async function AddItemsToCase(state: { message: string; } | undefined, formData: FormData){
+    let store : {items: Item[], cases: Case[]} = JSON.parse(fs.readFileSync(process.cwd() + "/app/lib/store.json", 'utf8'));
+    let _caseId: string | null = formData.get("cases") as unknown as string;
+    let _itemId: string | null = formData.get("items") as unknown as string;
+    if(!_caseId || !_itemId || _caseId == "---выберите кейс---" || _itemId == "---выберите предмет---"){
+        return {
+            message: "Ошибка, кейс и/или предмет не задан",
+          };
+    }
+    if(!store.cases.some(i=>i.caseId == _caseId) && !store.items.some(i=> i.itemId == _itemId)){
+        return {
+            message: "Ошибка, кейс и/или предмет не найден",
+          };
+    }
+    if(store.cases.filter(c=>(c.items && c.items.some(i=>i.id == _itemId)?true:false)).length > 0){
+        return {
+            message: "Предмет уже добавлен",
+          };
+    }
+    store.cases = store.cases.map((item)=>{
+        if(item.caseId == _caseId && _itemId){
+            let _items = item.items;
+            if(_items){
+                _items.push({id:_itemId})
+                return {...item, items: _items}
+            }else{
+                _items = [{id:_itemId}]
+                return {...item, items: _items}
+            }
+        }
+        return item;
+    })
+    fs.writeFileSync(process.cwd() + "/app/lib/store.json", JSON.stringify(store))
+    revalidatePath("/casesmenu")
+}
+
+export async function RemoveItemsToCase(state: { message: string; } | undefined, formData: FormData){
+    let store : {items: Item[], cases: Case[]} = JSON.parse(fs.readFileSync(process.cwd() + "/app/lib/store.json", 'utf8'));
+    let _caseId: string | null = formData.get("cases") as unknown as string;
+    let _itemId: string | null = formData.get("items") as unknown as string;
+    if(!_caseId || !_itemId || _caseId == "---кейс не выбран---" || _itemId == "---выберите предмет---"){
+        return {
+            message: "Ошибка, кейс и/или предмет не задан",
+          };
+    }
+    if(!store.cases.some(i=>i.caseId == _caseId) && !store.items.some(i=> i.itemId == _itemId)){
+        return {
+            message: "Ошибка, кейс и/или предмет не найден",
+          };
+    }
+    store.cases = store.cases.map((item)=>{
+        if(item.caseId == _caseId && _itemId){
+            let _items = item.items;
+            if(_items){
+                _items = _items.filter(i=> i.id != _itemId);
+                
+                
+                return {...item, items: _items}
+            }
+        }
+        return item;
+    })
+    fs.writeFileSync(process.cwd() + "/app/lib/store.json", JSON.stringify(store))
     revalidatePath("/casesmenu")
 }

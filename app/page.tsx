@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <FlexCol className='w-full'>
       <Spacer size={80}/>
-      <CaseSection>123</CaseSection>
+      <CaseSection name='Стандарт' nameClasses='text-[22px] px-6'>123</CaseSection>
     </FlexCol>
   )
 }

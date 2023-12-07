@@ -5,7 +5,7 @@ import { FlexCol } from "../utils/flex";
 import { useState } from 'react';
 import fs from 'fs';
 import ItemElement from '../ui/item';
-import { AddCaseForm, AddItemForm, ChangCaseForm, ChangItemForm, RemoveCaseForm, RemoveItemForm } from "./ui/itemmenu";
+import { AddCaseForm, AddItemForm, AddItemsToCaseForm, ChangCaseForm, ChangItemForm, RemoveCaseForm, RemoveItemForm } from "./ui/itemmenu";
 import CaseElement from "../ui/case";
 import { useSession } from "next-auth/react";
 import { redirect } from 'next/navigation';
@@ -15,8 +15,11 @@ export default async function Page(){
 
     const session = await getServerSession()
 
-    if(!session){
-        redirect("/")
+    if(!session || !session.user || !session.user.name){
+        redirect("/");
+    }
+    if(session.user.name != "Алеф Маршалл"){
+        redirect("/");
     }
 
     let file : {items: Item[], cases: Case[]} = JSON.parse(fs.readFileSync(process.cwd() + "/app/lib/store.json", 'utf8'));
@@ -40,6 +43,7 @@ export default async function Page(){
                 image={item.image}
                 price={item.price}
                 describe={item.describe}
+                rarity={item.rarity}
                 />)}
             </CaseSection>
             <CaseSection name="Управление кейсами" className="gap-5 px-[5%]" mt="mt-[60px]">
@@ -57,6 +61,9 @@ export default async function Page(){
                 price={item.price}
                 describe={item.describe}
                 />)}
+            </CaseSection>
+            <CaseSection name="Добавить предметы в кейс" className="gap-5 px-[5%]" mt="mt-[60px]">
+                <AddItemsToCaseForm items={items} cases={cases}/>
             </CaseSection>
             <Spacer size={80}/>
         </FlexCol>

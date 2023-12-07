@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@radix-ui/themes": "^2.0.1",
+    "clsx": "^2.0.0",
+    "js-easing-functions": "^1.0.3",
     "next": "14.0.3",
     "next-auth": "^4.24.5",
     "react": "^18",

@@ -4,6 +4,7 @@ export type Case = {
     price: number,
     image: string,
     describe: string,
+    items?: {id: string, prob?: number}[]
 }
 
 export type Item = {
@@ -12,4 +13,5 @@ export type Item = {
     price: number,
     image: string,
     describe: string,
+    rarity: string,
 }
