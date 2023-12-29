@@ -2,7 +2,6 @@ import { Session } from "next-auth";
 import Image from "next/image";
 import { FlexCol, FlexRow } from "../utils/flex";
 import Link from "next/link";
-import readDb from "../lib/utils";
 import CasinoAdapter from '../lib/adapter';
 import { supabase } from "../lib/initSupabase";
 import { createClient } from "@supabase/supabase-js";
