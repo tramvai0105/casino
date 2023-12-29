@@ -5,7 +5,7 @@ const nextConfig = {
         remotePatterns: [
           {
             protocol: 'https',
-            hostname: 'sun2-22.userapi.com',
+            hostname: '*.userapi.com',
             port: '',
             pathname: '/**',
           },

@@ -190,6 +190,7 @@ export function AddItemsToCaseForm({ cases, items }: { cases: Case[]; items: Ite
                             image={_item.image}
                             price={_item.price}
                             describe={_item.describe}
+                            rarity={_item.rarity}
                         />
                     })
                     : <></>}

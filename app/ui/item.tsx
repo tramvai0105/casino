@@ -5,7 +5,7 @@ export default function ItemElement({ id, name, image, price, describe, onClick,
 
 
     return (
-        <div onClick={onClick} className='relative h-fit w-[180px]'>
+        <div onClick={onClick} className='relative h-fit min-w-[168px] max-w-[168px]'>
             <FlexCol className={clsx({'from-[#304384]':(rarity == "common" || rarity == null), 'from-[#6D2545]':(rarity == "rare"), 'from-[#8F6424]':(rarity == "legend")},
             {'before:bg-[#3E63DD]':(rarity == "common" || rarity == null), 'before:bg-[#E93D82]':(rarity == "rare"), 'before:bg-[#FFC53D]':(rarity == "legend")},
             'to-[#141726] bg-gradient-to-b rounded-xl p-1 before:-translate-y-[100%] before:w-[80%] before:h-[4px] before:rounded-lg')}>

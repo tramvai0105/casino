@@ -1,1 +1,48 @@
-{"items":[{"itemId":"123","name":"Сырный соус","price":100,"image":"123.png","describe":"Делает фритошку особенно вкусной","rarity":"legend"},{"itemId":"321","name":"Ведро с харчами","price":50,"image":"321.png","describe":"Но не с харчой","rarity":"common"}],"cases":[{"caseId":"321","name":"ХрюкБокс","price":7000,"image":"pigbox.png","describe":"Мечта хряка","items":[{"id":"321"},{"id":"123"}]}]}
+{
+    "items": [
+        {
+            "itemId": "123",
+            "name": "Сырный соус",
+            "price": 100,
+            "image": "123.png",
+            "describe": "Делает фритошку особенно вкусной",
+            "rarity": "legend"
+        },
+        {
+            "itemId": "321",
+            "name": "Ведро с харчами",
+            "price": 50,
+            "image": "321.png",
+            "describe": "Но не с харчой",
+            "rarity": "common"
+        },
+        {
+            "itemId": "8lglpy13guj",
+            "name": "Брюлик",
+            "price": 500,
+            "image": "8lglpy13guj.png",
+            "describe": "Инкрустирую пятак",
+            "rarity": "rare"
+        }
+    ],
+    "cases": [
+        {
+            "caseId": "321",
+            "name": "ХрюкБокс",
+            "price": 7000,
+            "image": "pigbox.png",
+            "describe": "Мечта хряка",
+            "items": [
+                {
+                    "id": "321"
+                },
+                {
+                    "id": "123"
+                },
+                {
+                    "id": "8lglpy13guj"
+                }
+            ]
+        }
+    ]
+}

@@ -10,23 +10,22 @@ import CaseElement from "../ui/case";
 import { useSession } from "next-auth/react";
 import { redirect } from 'next/navigation';
 import { getServerSession } from "next-auth/next";
+import {SuBaDB} from "../lib/sb";
 
 export default async function Page(){
 
+    const db = SuBaDB(process.env.NEXT_PUBLIC_SUPABASE_URL as string, process.env.SUPABASE_SERVICE_ROLE_KEY as string);
     const session = await getServerSession()
-
     if(!session || !session.user || !session.user.name){
         redirect("/");
     }
-    if(session.user.name != "Алеф Маршалл"){
+    if(session.user.name.toLocaleLowerCase() != "голоса лосей"){
         redirect("/");
     }
 
-    let file : {items: Item[], cases: Case[]} = JSON.parse(fs.readFileSync(process.cwd() + "/app/lib/store.json", 'utf8'));
+    let items : Item[] = await db.getItems()
+    let cases: Case[] = await db.getCases()
     
-    let cases: Case[] = file.cases;
-    let items: Item[] = [...file.items];
-
     return(
         <FlexCol className='w-full'>
             <CaseSection name="Управление предметами" className="gap-5 px-[5%]" mt="mt-[60px]">

@@ -6,6 +6,7 @@ import { FlexCol, FlexRow } from "../utils/flex";
 import {codeAlgorithm, decodeAlgorithm, bestTime} from "./algorithms";
 import KeyPhrase from "./ui/keyphrase";
 import TextArea from "./ui/textarea";
+import { supabase } from "../lib/initSupabase";
 
 export default function Page(){
     const [phrase, setPhrase] = useState<string>("")
