@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     global: { headers: { "X-Client-Info": "@auth/supabase-adapter" } },
   })
   
-  const { data, error }: {data: {id: string, name: string, image: string, money: number, items: string[]} | null, error: PostgrestResponseFailure} = 
+  const { data, error } = 
   await supabase
     .from("users")
     .select()
