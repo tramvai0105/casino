@@ -17,7 +17,7 @@ export default async function Home() {
       <Spacer size={80} />
       <CaseSection className='flex border-b-[2px] border-[#363A3F] flex-wrap px-[5%]' name='Стандарт' nameClasses='text-[26px]'>
         {cases.map((item, i) =>
-        <Link href={`/case/${item.caseId}`}>
+        <Link key={i} href={`/case/${item.caseId}`}>
           <CaseElement
             key={i}
             id={item.caseId}
