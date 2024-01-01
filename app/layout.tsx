@@ -23,9 +23,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={"text-white " + inter.className}>
+      <body className={"text-white h-[100vh] " + inter.className}>
         <SessionProvider session={session}>
-          <FlexCol className='gap-4'>
+          <FlexCol className='gap-4 h-full'>
             <Header />
             <Spacer size={41}/>
             {children}

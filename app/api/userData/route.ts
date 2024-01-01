@@ -11,14 +11,7 @@ function getRandomInt(min: number, max: number) {
 }
 
 export async function POST(request: Request) {
-  let { id, caseId }: { id: string, caseId: string } = await request.json()
-  const db = SuBaDB();
-  const _case = await db.getCase(caseId);
-  const items: Item[] = await db.getItemsFromCase(caseId);
-  if(items == undefined){
-    return Response.error()
-  }
-  let item = items[getRandomInt(0, items.length)]
+  let { id }: { id: string } = await request.json()
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL as string, process.env.SUPABASE_SERVICE_ROLE_KEY as string, {
     db: { schema: "next_auth" },
     global: { headers: { "X-Client-Info": "@auth/supabase-adapter" } },
@@ -27,22 +20,11 @@ export async function POST(request: Request) {
   const { data, error } = 
   await supabase
     .from("users")
-    .select()
+    .select("*")
     .eq("id", id)
-    .maybeSingle()
-  if(data && data.money >= _case.price){
-    data.money -= _case.price;
-    data.opened += 1;
-    data.items.push(item.itemId);
-    await supabase
-      .from("users")
-      .update({
-        ...data,
-      })
-      .eq("id", data.id)
-      .select()
-      .single()
-    return Response.json(item);
+    .single()
+  if(data){
+    return Response.json(data);
   }
   return Response.error()
 }

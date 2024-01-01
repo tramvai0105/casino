@@ -6,19 +6,19 @@ import { FlexCol } from "@/app/utils/flex";
 import CaseOpen from "./ui/caseOpen";
 import Link from "next/link";
 import { SuBaDB } from '../../lib/sb';
+import {useRouter} from "next/navigation";
 
 export default async function Page({ params }: { params: { id: string } }){
     const id = params.id;
-
-    let db = SuBaDB()
+    let db = SuBaDB();
     let _case: Case | [] = await db.getCase(id);
-    let _items: Item[] = await db.getItemsFromCase(id);
+    let _items: Item[] | [] = await db.getItemsFromCase(id);
     if(Array.isArray(_case)){
         notFound()
     }
 
     return(
-        <CaseSection nameClasses="hidden" mt="mt-6">
+        <CaseSection nameClasses="hidden" mt="mt-12">
             <FlexCol className="w-full mt-4 relative">
                 <Link className="mb-6 ml-2 mr-auto p-2 border-[2px] border-[#212225] hover:border-[#43484E] transition-colors duration-500" href="/">Назад к кейсам</Link>
                 <span className="mb-10 text-[24px] relative z-40 border-b-[2px]">{_case.name.toUpperCase()}</span>

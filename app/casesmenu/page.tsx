@@ -14,12 +14,14 @@ import {SuBaDB} from "../lib/sb";
 
 export default async function Page(){
 
+    const allowUsers = ["голоса лосей", "восемьдесят шесть"]
+
     const db = SuBaDB(process.env.NEXT_PUBLIC_SUPABASE_URL as string, process.env.SUPABASE_SERVICE_ROLE_KEY as string);
     const session = await getServerSession()
     if(!session || !session.user || !session.user.name){
         redirect("/");
     }
-    if(session.user.name.toLocaleLowerCase() != "голоса лосей"){
+    if(allowUsers.includes(session.user.name.toLocaleLowerCase())){
         redirect("/");
     }
 

@@ -1,5 +1,5 @@
 import { PostgrestSingleResponse, createClient } from "@supabase/supabase-js";
-import { Case, Item } from "./types";
+import { Case, Item } from './types';
 
 type ItemExId = Omit<Item, "itemId">
 
@@ -78,7 +78,7 @@ export const SuBaDB = (url: string = process.env.NEXT_PUBLIC_SUPABASE_URL as str
             if(data){
                 let itemsIds: {id: string}[] = data[0].items;
                 let ids: string[] = itemsIds.map(i=> i.id);
-                const items = await supabase.from("items")
+                let items = await supabase.from("items")
                     .select("*").match({itemId: ids})
                 if(items.data){
                     return items.data
@@ -122,6 +122,14 @@ export const SuBaDB = (url: string = process.env.NEXT_PUBLIC_SUPABASE_URL as str
                 items = items.filter(i=> i.id != itemId);
                 await supabase.from('cases').update({"items":items}).eq('caseId', caseId)
             }    
+        },
+        async SetOfItems(_items: string[]){
+            let ids = Array.from(new Set(_items))
+            let data = await supabase.from("items").select("*").match({"itemId": ids})
+            if(data){
+                return data.data;
+            }
+            return [];
         }
     }
 }

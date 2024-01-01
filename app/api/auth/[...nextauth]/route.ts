@@ -22,16 +22,10 @@ const authOptions = {
     }),
     callbacks: {
         async session({ session, user, token }:{session: Session, user: User, token: JWT}) {
-            const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL as string, process.env.SUPABASE_SERVICE_ROLE_KEY as string, {
-                db: { schema: "next_auth" },
-                global: { headers: { "X-Client-Info": "@auth/supabase-adapter" } },
-            })
             if(session.user){
                 session.user.id = token.sub;
-                const {data, error} = await supabase.from("users").select("money").eq("id", token.sub).maybeSingle()
-                session.user.money = data?.money;
                 }
-            return Promise.resolve(session)
+            return session;
         },
     },
 }

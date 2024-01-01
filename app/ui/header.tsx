@@ -5,11 +5,13 @@ import Link from "next/link";
 import { FlexRow } from '../utils/flex';
 import { HeaderButton } from './buttons';
 import box from "@/public/box.svg"
-import { useSession } from "next-auth/react";
 import HeaderAuth from "./headerAuth";
+import { getServerSession } from "next-auth";
+import { createClient } from "@supabase/supabase-js";
+import { useSession } from 'next-auth/react';
 
 export default function Header(){
-    const session = useSession()
+    const session = useSession();
     
     return(
         <header className="w-full h-fit fixed z-[51]">

@@ -1,16 +1,14 @@
 "use client"
 import { Item } from "@/app/lib/types";
-import CaseElement from "@/app/ui/case";
 import ItemElement from "@/app/ui/item";
 import { FlexCol, FlexRow } from "@/app/utils/flex";
 import { easeOutQuart } from "js-easing-functions";
-import { resolve } from "path";
 import { useRef, useEffect, useState } from 'react';
 import { Case } from '../../../lib/types';
 import Image from 'next/image';
 import clsx from "clsx";
 import { useSession } from "next-auth/react";
-import { SuBaDB } from "@/app/lib/sb";
+import { useRouter } from "next/navigation";
 
 function getRandomInt(min: number, max: number) {
     min = Math.ceil(min);
@@ -19,8 +17,9 @@ function getRandomInt(min: number, max: number) {
 }
 
 export default function CaseOpen({ items, _case, price }: { items: Item[], _case: Case, price: number }) {
-    const { data: session, status } = useSession()
-    const [openItems, setOpenItems] = useState<Item[]>();
+    const Router = useRouter();
+    const { data: session, update } = useSession()
+    const [openItems, setOpenItems] = useState<Item[]>([]);
     const [prize, setPrize] = useState<Item | null>(null);
     const [showPrize, setShowPrize] = useState(false);
     const [animation, setAnimation] = useState<boolean>(false);
@@ -30,14 +29,18 @@ export default function CaseOpen({ items, _case, price }: { items: Item[], _case
     
     useEffect(() => {
         UpdateOpenItems();
-    }, [])
+    }, [items])
 
     function UpdateOpenItems(){
         let _items: Item[] = []
-        for (let i = 0; i < 50; i++) {
-            _items.push(items[getRandomInt(0, items.length)])
+        if(items.length == 0){
+            Router.refresh()
+        }else{
+            for (let i = 0; i < 50; i++) {
+                _items.push(items[getRandomInt(0, items.length)])
+            }
+            setOpenItems(_items)
         }
-        setOpenItems(_items)
     }
 
     useEffect(() => {
@@ -86,8 +89,6 @@ export default function CaseOpen({ items, _case, price }: { items: Item[], _case
             return;
         }
         if (openItems && session) {
-            console.log(session);
-            
             let res = await fetch("/api/open", {
                 method: "POST",
                 body: JSON.stringify({id: session.user.id, caseId: _case.caseId}),
@@ -103,9 +104,10 @@ export default function CaseOpen({ items, _case, price }: { items: Item[], _case
                     _items[32] = body
                     return _items
                 }
-                return undefined;
+                return [];
             })
             setAnimation(animation => !animation);
+            await update();
         }
     }
 
@@ -138,7 +140,8 @@ export default function CaseOpen({ items, _case, price }: { items: Item[], _case
             <div className="absolute z-10 text-yellow-400 -translate-y-[20px] text-[22px] font-bold">V</div>
             <div className="absolute z-10 text-yellow-400 rotate-180 translate-y-[170px] text-[22px] font-bold">V</div>
             <div ref={animateRef} className="flex flex-row w-full min-h-[190px] mx-[10px] gap-1 overflow-y-hidden overflow-x-hidden">
-                {(openItems) ? openItems.map((item, i) => <ItemElement
+                {(openItems && openItems.length > 0) ? openItems.map((item, i) => {
+                return<ItemElement
                     key={i}
                     id={item.itemId}
                     name={item.name}
@@ -148,7 +151,7 @@ export default function CaseOpen({ items, _case, price }: { items: Item[], _case
                     rarity={item.rarity}
                     describeOn={false}
                     onClick={() => console.log(i)}
-                />) : <></>}
+                />}) : <></>}
             </div>
             <button className="mt-10 bg-[#E5484D] border-[#E5484D] border-[2px] hover:border-white transition-all px-14 py-4 text-[18px] relative font-bold rounded-sm z-40"
                 onClick={openCase}>ОТКРЫТЬ КЕЙС ЗА {price}</button>

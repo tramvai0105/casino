@@ -10,6 +10,7 @@ declare module "next-auth" {
       address: string,
       id: string | undefined,
       money: number | undefined,
+      items: string[] | undefined,
     } & DefaultSession["user"]
   }
 }
