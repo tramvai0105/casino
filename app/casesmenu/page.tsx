@@ -21,7 +21,7 @@ export default async function Page(){
     if(!session || !session.user || !session.user.name){
         redirect("/");
     }
-    if(allowUsers.includes(session.user.name.toLocaleLowerCase())){
+    if(!allowUsers.includes(session.user.name.toLocaleLowerCase())){
         redirect("/");
     }
 
