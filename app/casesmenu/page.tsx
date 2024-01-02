@@ -30,7 +30,7 @@ export default async function Page(){
     
     return(
         <FlexCol className='w-full'>
-            <CaseSection name="Управление предметами" className="gap-5 px-[5%]" mt="mt-[60px]">
+            <CaseSection name="Управление предметами" className="gap-5 px-[5%]" mt="mt-[120px]">
                 <AddItemForm/>
                 <ChangItemForm items={items}/>
                 <RemoveItemForm items={items}/>
